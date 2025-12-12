@@ -1,0 +1,1626 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hendi Nurendi — Portfolio (Cyberpunk++)</title>
+  <meta name="description" content="Portfolio CV Hendi Nurendi — Frontend Developer & UI/UX | Cyberpunk theme (enhanced)" />
+<style>
+/* ------------------------------------------------ */
+/* ---------- RESET & THEME (Variabel) ---------- */
+/* ------------------------------------------------ */
+:root{
+  --bg-1: #0a041a;
+  --bg-2: #150927;
+  --accent-1: #9b5cff; /* purple */
+  --accent-2: #ff4ec9; /* pink */
+  --muted: #cbd5e1;
+  --glass: rgba(255,255,255,0.04);
+  --neon: 0 8px 40px rgba(155,92,255,0.18), 0 0 30px rgba(255,78,201,0.08);
+  --transition-fast: 180ms cubic-bezier(.2,.9,.2,1);
+  --glass-bg-nav: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  --glass-bg-card: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+}
+
+/* ------------------------------------------------ */
+/* ---------- MONO HACKER MODE ---------- */
+/* ------------------------------------------------ */
+body.hacker {
+  --bg-1: #020302;
+  --bg-2: #0a0f0a;
+  --accent-1: #00ff6a; /* neon green */
+  --accent-2: #00ff9c;
+  --muted: #00c054;
+  color: #00ff6a !important;
+  filter: contrast(1.2);
+}
+
+body.hacker *,
+body.hacker .hero-content h1 {
+  color: var(--accent-1) !important;
+  border-color: var(--accent-1) !important;
+}
+
+body.hacker nav,
+body.hacker section,
+body.hacker .card,
+body.hacker .profile-card {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid var(--accent-1) !important;
+}
+
+body.hacker .logo {
+  background: transparent !important;
+  box-shadow: 0 0 12px var(--accent-1);
+  border: 1px solid var(--accent-1);
+}
+
+body.hacker .neon-hover:hover {
+  box-shadow: 0 0 14px var(--accent-1);
+}
+
+body.hacker .btn {
+  border: 1px solid var(--accent-1) !important;
+  background: rgba(0, 255, 70, 0.1) !important;
+}
+
+body.hacker .mobile-menu {
+  background: rgba(0,0,0,0.95) !important;
+}
+
+body.hacker .hero-content h1 {
+  text-shadow: 0 0 12px var(--accent-1);
+}
+
+/* Terminal scanline effect */
+body.hacker::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 90, 0.08) 0px,
+    rgba(0, 255, 90, 0.08) 1px,
+    transparent 2px
+  );
+  opacity: .15;
+  z-index: 999999;
+}
+
+/* OVERRIDE HACKER MODE agar tetap terbaca */
+body.hacker .rekrut-btn a,
+body.hacker .mobile-rekrut-btn {
+  background: var(--accent-1) !important;
+  color: #000 !important;
+  border-color: var(--accent-1) !important;
+}
+
+/* ------------------------------------------------ */
+/* ---------- BASE STYLES ---------- */
+/* ------------------------------------------------ */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:
+    radial-gradient(1200px 600px at 10% 10%, rgba(155,92,255,0.08), transparent 10%),
+    radial-gradient(900px 500px at 90% 90%, rgba(255,78,201,0.06), transparent 12%),
+    linear-gradient(180deg,var(--bg-1),var(--bg-2));
+  color: #f6f6fb;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+a{color:inherit}
+main{max-width:1100px;margin:0 auto;padding:120px 24px 80px;position:relative;z-index:2;}
+
+/* ------------------------------------------------ */
+/* ---------- CYBER GRID BACKGROUND ---------- */
+/* ------------------------------------------------ */
+.cyber-grid{
+  position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:overlay;opacity:0.12;
+  background-image:
+    linear-gradient(0deg, rgba(255,78,201,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(155,92,255,0.06) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px;
+  transform: translateZ(0);
+  animation: moveGrid 20s linear infinite;
+}
+@keyframes moveGrid { from { background-position: 0 0, 0 0 } to { background-position: 800px 0, 0 800px } }
+
+/* ------------------------------------------------ */
+/* ---------- PAGE TRANSITION (fade-in/out) ---------- */
+/* ------------------------------------------------ */
+.page-fader{
+  position:fixed;inset:0;background:linear-gradient(180deg, rgba(10,6,20,0.85), rgba(10,6,20,0.9));z-index:9999;
+  pointer-events:none;opacity:1;transition:opacity .75s cubic-bezier(.2,.9,.2,1);
+}
+.page-fader.hidden{opacity:0;pointer-events:none}
+
+/* ------------------------------------------------ */
+/* ---------- NAVBAR ---------- */
+/* ------------------------------------------------ */
+nav{
+  position:fixed;left:0;right:0;top:12px;z-index:1200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 28px;background:var(--glass-bg-nav);
+  border-radius:12px;margin:0 24px;backdrop-filter: blur(8px);
+  box-shadow: 0 6px 30px rgba(10,6,20,0.55);
+  transition:transform var(--transition-fast);
+}
+nav .brand{display:flex;gap:12px;align-items:center;cursor:default}
+.brand .logo{
+  width:44px;height:44px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+  box-shadow:var(--neon);
+  display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;
+  transform-origin:center;
+  transition:transform .25s ease;
+}
+nav ul{display:flex;gap:18px;list-style:none;align-items:center}
+nav ul a{padding:8px 12px;border-radius:8px;text-decoration:none;color: #e6e6ff;font-weight:600;opacity:0.95}
+nav ul a:hover{background:rgba(255,255,255,0.03);box-shadow:0 6px 16px rgba(155,92,255,0.06)}
+
+/* ===== NAV ACTIONS (KANAN) ===== */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Theme toggle */
+.theme-toggle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  font-size: 20px;
+  line-height: 1;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.theme-toggle:hover {
+  box-shadow: var(--neon);
+  transform: translateY(-2px);
+}
+
+/* Hamburger sejajar */
+.hamburger {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* FIX REKRUT BUTTON (DESKTOP) */
+.rekrut-btn a {
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2)) !important;
+  color: #fff !important;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ------------------------------------------------ */
+/* ---------- HERO SECTION ---------- */
+/* ------------------------------------------------ */
+.hero{
+  display:grid;grid-template-columns: 260px 1fr;gap:36px;align-items:center;
+  min-height:78vh;padding:28px;border-radius:16px;background:var(--glass-bg-card);
+  box-shadow: 0 12px 50px rgba(3,2,10,0.6);
+  position:relative;overflow:hidden;
+  transform-style:preserve-3d;
+}
+
+.hero:before{
+  content:"";position:absolute;inset:-30% -10% auto -10%;height:120%;z-index:-2;
+  background: radial-gradient(600px 500px at 10% 40%, rgba(155,92,255,0.12), transparent 15%),
+              radial-gradient(600px 500px at 90% 60%, rgba(255,78,201,0.10), transparent 15%);
+  filter: blur(40px); transform: translateZ(0);
+  animation: slowShift 15s ease-in-out infinite;
+  border-radius:30px;
+}
+@keyframes slowShift { 0%{transform: translateX(-3%)}50%{transform: translateX(3%)}100%{transform: translateX(-3%)} }
+
+/* profile card */
+.profile-card{
+  display:flex;flex-direction:column;align-items:center;background:var(--glass-bg-card);
+  padding:18px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  transition:transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .18s;
+  transform-origin:center;
+}
+.profile-card.neon-hover:hover{box-shadow: var(--neon); transform:translateY(-6px) scale(1.02)}
+.avatar{
+  width:180px;height:180px;border-radius:18px;overflow:hidden;
+  border:6px solid rgba(155,92,255,0.15);
+  box-shadow: 0 12px 30px rgba(155,92,255,0.12), 0 0 30px rgba(255,78,201,0.06);
+  background:linear-gradient(135deg,#22102b,#1a0620);
+  display:flex;align-items:center;justify-content:center;
+  transition:box-shadow .18s, transform .18s;
+}
+.avatar:hover{box-shadow: var(--neon); transform:rotate(-1deg) scale(1.02)}
+.profile-name{margin-top:12px;font-size:20px;font-weight:700;color:var(--accent-1)}
+.profile-role{font-size:13px;color:var(--muted);margin-top:6px}
+.profile-audio{margin-top:14px}
+audio{width:160px;border-radius:8px;outline:none}
+
+/* hero content */
+.hero-content h3{
+  letter-spacing:1px;color: #ffd7ff; opacity:0.95;font-weight:600; margin-bottom:6px;
+  /* FIX smooth intro hero text */
+  opacity: 0;
+  transform: translateY(15px);
+  animation: smoothIntro .7s ease-out forwards;
+  animation-delay: .3s;
+}
+@keyframes smoothIntro {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.hero-content h1{font-size:46px;margin-top:6px;line-height:1.02;color:var(--accent-2);display:flex;align-items:center;gap:10px}
+.hero-content p{margin-top:14px;color:rgba(255,255,255,0.85);max-width:720px}
+.cta{margin-top:22px;display:flex;gap:14px;flex-wrap:wrap}
+
+/* buttons */
+.btn{
+  padding:12px 20px;border-radius:12px;text-decoration:none;font-weight:700;
+  border:1px solid rgba(255,255,255,0.06);background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+  color:#fff;backdrop-filter: blur(6px);
+  transition:transform .18s, box-shadow .18s, background .18s;
+}
+.btn:focus{outline:2px dashed rgba(155,92,255,0.18);outline-offset:4px}
+.btn-primary{
+  background:linear-gradient(90deg,var(--accent-1),var(--accent-2));
+  box-shadow:0 10px 30px rgba(155,92,255,0.18);
+}
+.btn.neon-hover:hover{box-shadow:var(--neon); transform:translateY(-6px)}
+.btn-ghost{border:1px dashed rgba(255,255,255,0.06)}
+
+/* floating particle dots */
+.particles { position:absolute; inset:0; pointer-events:none; z-index:-1; }
+.dot{position:absolute;border-radius:50%;background:linear-gradient(90deg,var(--accent-2),var(--accent-1)); opacity:0.18; filter:blur(6px);}
+
+/* typing effect */
+.typing { color:#fff; display:inline-block; border-right:2px solid rgba(255,255,255,0.12); padding-right:6px; margin-left:6px; }
+
+/* ------------------------------------------------ */
+/* ---------- SECTIONS & CARDS ---------- */
+/* ------------------------------------------------ */
+section { margin-top:56px; padding:26px; border-radius:12px; background: var(--glass-bg-card); box-shadow:0 10px 30px rgba(0,0,0,0.55); position:relative; z-index:1 }
+.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+h2{font-size:20px;color:var(--accent-1); position:relative; display:inline-block}
+p.lead{color:var(--muted);margin-top:8px}
+
+/* skills */
+.skills{display:flex;gap:18px;flex-wrap:wrap}
+.skill{min-width:160px;background:rgba(255,255,255,0.02);padding:12px;border-radius:12px}
+.bar{height:10px;background:#111;border-radius:8px;overflow:hidden;margin-top:8px}
+.bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));width:0%;transition:width 1.2s ease}
+
+/* projects grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{border-radius:12px;padding:16px;background:var(--glass-bg-card);border:1px solid rgba(255,255,255,0.03); transition:transform .18s, box-shadow .18s}
+.card:hover{transform:translateY(-6px);box-shadow:var(--neon)}
+.card h4{color:#fff;margin-bottom:8px}
+.card p{color:var(--muted);font-size:14px}
+
+/* contact form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+input,textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff}
+textarea{min-height:140px;resize:vertical}
+.submit{display:inline-block;padding:12px 18px;border-radius:10px;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;border:none;cursor:pointer;font-weight:700}
+
+/* FIX: Samakan tinggi card di section Projects */
+.grid .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 240px;
+}
+
+.grid .card p {
+  flex-grow: 1;
+}
+
+.grid .card > div {
+  margin-top: auto;
+}
+
+/* ------------------------------------------------ */
+/* ---------- OTHER COMPONENTS ---------- */
+/* ------------------------------------------------ */
+
+/* floating WhatsApp button */
+.wa-fab{
+  position:fixed;right:22px;bottom:22px;width:64px;height:64px;border-radius:16px;background:linear-gradient(45deg,#00e676,#00c853);
+  display:flex;align-items:center;justify-content:center;color:#002a00;font-weight:800;box-shadow:0 10px 30px rgba(0,200,120,0.18);
+  z-index:1300;cursor:pointer;transition:transform .18s ease;
+}
+.wa-fab:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,200,120,0.28)}
+.wa-fab .pulse{position:absolute;border-radius:16px;inset:-8px;background:radial-gradient(circle, rgba(0,200,120,0.12), transparent 30%);filter:blur(6px);animation: pulse 2s infinite}
+@keyframes pulse{0%{transform:scale(.95);opacity:0.7}50%{transform:scale(1.12);opacity:0.4}100%{transform:scale(.95);opacity:0.7}}
+
+footer{margin-top:36px;text-align:center;color:var(--muted);font-size:13px}
+
+/* NEON HOVER UTIL */
+.neon-hover { transition: box-shadow .18s, transform .18s }
+.glow { box-shadow: var(--neon) }
+
+/* ------------------------------------------------ */
+/* ---------- GLITCH EFFECT (applied to headings) ---------- */
+/* ------------------------------------------------ */
+/* ------- GLITCH FIX (tidak bertabrakan) ------- */
+.glitch {
+  position: relative;
+  display: inline-block;
+  color: var(--accent-1);
+  line-height: 1.2;
+  padding-bottom: 2px;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Efek glitch halus */
+.glitch::before {
+  color: var(--accent-2);
+  clip-path: inset(0 0 50% 0);
+  transform: translate(1px, -1px);
+  opacity: 0.6;
+  animation: glitchTop 2.2s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  color: var(--accent-1);
+  clip-path: inset(50% 0 0 0);
+  transform: translate(-1px, 1px);
+  opacity: 0.6;
+  animation: glitchBottom 2.4s infinite linear alternate-reverse;
+}
+
+@keyframes glitchTop {
+  0% { transform: translate(1px, -1px); }
+  100% { transform: translate(2px, -1px); }
+}
+
+@keyframes glitchBottom {
+  0% { transform: translate(-1px, 1px); }
+  100% { transform: translate(-2px, 1px); }
+}
+
+
+@keyframes glitchTop{
+  0%{clip:rect(0,9999px,0,0);transform:translateY(0)}
+  10%{clip:rect(2px,9999px,40px,0);transform:translate(-1px,-2px)}
+  20%{clip:rect(10px,9999px,60px,0);transform:translate(1px,0)}
+  30%{clip:rect(40px,9999px,80px,0);transform:translate(-2px,2px)}
+  40%{clip:rect(12px,9999px,48px,0);transform:translate(0,-1px)}
+  100%{clip:rect(0,9999px,0,0);transform:translateY(0)}
+}
+@keyframes glitchBottom{
+  0%{clip:rect(0,9999px,0,0);transform:translateY(0)}
+  8%{clip:rect(60px,9999px,90px,0);transform:translate(2px,2px)}
+  18%{clip:rect(16px,9999px,40px,0);transform:translate(-1px,-2px)}
+  28%{clip:rect(40px,9999px,70px,0);transform:translate(1px,1px)}
+  50%{clip:rect(8px,9999px,24px,0);transform:translate(-2px,0)}
+  100%{clip:rect(0,9999px,0,0);transform:translateY(0)}
+}
+
+/* ------------------------------------------------ */
+/* ---------- ADDITIONAL SECTIONS STYLES ---------- */
+/* ------------------------------------------------ */
+
+/* VIDEO PROJECT FIX */
+.video-wrapper {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(255, 0, 200, 0.25);
+}
+
+.video-wrapper video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ABOUT LAYOUT */
+.about-grid {
+  display: flex;
+  gap: 40px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.about-box {
+  flex: 1;
+  min-width: 280px;
+}
+
+/* EDUCATION TABLE */
+.edu-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.edu-table th {
+  text-align: left;
+  color: var(--muted);
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.edu-table td {
+  padding: 6px 0;
+  color: #fff;
+}
+
+.edu-table td:nth-child(1) { width: 130px; } /* Tahun */
+.edu-table td:nth-child(2) { width: 200px; } /* Instansi */
+
+/* GALLERY SECTION */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.gallery-item {
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  transition: transform .18s, box-shadow .18s;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.02);
+}
+
+.gallery-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(255,78,201,0.2);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* LOCATION SECTION */
+.location-wrapper {
+  margin-top: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.map-container {
+  height: 300px; /* Ukuran peta */
+  background: #0d091a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ------------------------------------------------ */
+/* ---------- RESPONSIVE / MOBILE MENU ---------- */
+/* ------------------------------------------------ */
+
+/* === HAMBURGER FINAL (NEON + ANIMASI) === */
+.hamburger {
+  width: 44px;
+  height: 44px;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  transition: box-shadow .25s ease, transform .2s ease;
+}
+
+.hamburger:hover {
+  box-shadow: 0 0 15px var(--accent-1);
+  transform: translateY(-2px);
+}
+
+.hamburger span {
+  width: 26px;
+  height: 3px;
+  background: var(--accent-1);
+  border-radius: 6px;
+  transition: all .35s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+/* === ANIMASI JADI X === */
+.hamburger.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* MOBILE ONLY */
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+}
+
+
+/* X animation */
+.hamburger.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ===== MOBILE MENU FIX ===== */
+.mobile-menu {
+  position: fixed;
+  top: 80px;
+  right: 16px;
+  width: 260px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  background: linear-gradient(180deg, #2a0044, #12001f);
+  padding: 18px;
+  border-radius: 18px;
+
+  box-shadow: 0 0 25px rgba(0,255,255,.15);
+  backdrop-filter: blur(14px);
+
+  opacity: 0;
+  transform: translateY(-15px) scale(0.96);
+  pointer-events: none;
+  transition: all .35s ease;
+  z-index: 9999;
+}
+
+.mobile-menu.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.mobile-menu a {
+  text-decoration: none !important;
+  color: #fff;
+  font-size: 15px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  transition: background .25s ease, transform .2s ease;
+}
+
+.mobile-menu a:hover {
+  background: rgba(0,255,255,.15);
+  transform: translateX(4px);
+}
+
+
+/* MEDIA QUERIES */
+@media (max-width: 900px){
+  /* Umum */
+  .hero{grid-template-columns:1fr; padding:20px}
+  .profile-card{flex-direction:row;gap:12px;align-items:center}
+  .avatar{width:110px;height:110px;border-radius:14px}
+  main{padding:100px 16px 40px}
+  nav{margin:0 12px;padding:10px 14px}
+  .form-grid{grid-template-columns:1fr}
+  audio{width:140px}
+  #hero h1{font-size:34px}
+}
+
+@media (max-width: 768px) {
+  /* Mobile Navbar */
+  nav ul {
+    display: none; /* Sembunyikan link desktop */
+  }
+
+  .nav-links {
+    display: none; /* Sembunyikan ul desktop */
+  }
+
+  .hamburger {
+    display: flex; /* Tampilkan Hamburger */
+  }
+}
+.submit {
+  background: #00ff80;
+  color: #000;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 2px solid #00ff80;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.submit:hover {
+  background: transparent;
+  color: #00ff80;
+}
+.btn {
+  background: #00ff80;
+  color: #000;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 2px solid #00ff80;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+.btn:hover {
+  background: transparent;
+  color: #00ff80;
+}
+
+.cta {
+  display: flex;
+  gap: 20px;
+}
+
+.cta {
+  display: flex;
+  gap: 20px;
+}
+
+/* Tombol sama seperti card */
+.btn-cyber {
+  display: inline-block;
+  padding: 12px 28px;
+  background: #00ff85;           /* awal HIJAU seperti tombol Demo/Live */
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 18px;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+/* Hover effect sama */
+.btn-cyber:hover {
+  background: transparent;       /* saat hover jadi transparan */
+  color: #00ff85;
+  border: 2px solid #00ff85;
+  box-shadow: 0 0 20px #00ff85;
+}
+
+/* Animasi klik halus untuk semua tombol & link */
+.nav-links a,
+.btn,
+.btn-primary,
+.neon-hover,
+.mobile-menu a,
+.mobile-rekrut-btn {
+  transition: transform 0.15s ease, 
+              filter 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+/* Efek saat diklik */
+.nav-links a:active,
+.btn:active,
+.btn-primary:active,
+.neon-hover:active,
+.mobile-menu a:active,
+.mobile-rekrut-btn:active {
+  transform: scale(0.93);       /* animasi mengecil halus */
+  filter: brightness(0.8);      /* sedikit gelap */
+  box-shadow: 0 0 10px var(--accent-1); /* neon saat ditekan */
+}
+
+.nav-links a:hover,
+.mobile-menu a:hover {
+  color: var(--accent-1);
+  text-shadow: 0 0 8px var(--accent-1);
+}
+
+/* Wrapper audio */
+.profile-audio {
+  display: inline-block;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(0, 255, 120, 0.06);
+  box-shadow: 0 0 0px var(--accent-1);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover animation */
+.profile-audio:hover {
+  box-shadow: 0 0 15px var(--accent-1);
+  transform: translateY(-2px);
+}
+
+/* Audio element styling */
+.profile-audio audio {
+  filter: drop-shadow(0 0 6px var(--accent-1));
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+/* Saat audio diklik */
+.profile-audio:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 25px var(--accent-1);
+}
+
+/* Saat audio PLAY → getar halus glowing */
+.audio-playing {
+  animation: pulseGlow 1.6s infinite ease-in-out;
+}
+
+/* animasi glow */
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 10px var(--accent-1); }
+  50% { box-shadow: 0 0 25px var(--accent-1); }
+  100% { box-shadow: 0 0 10px var(--accent-1); }
+}
+
+/* Slide-in animation untuk skill cards */
+.skill {
+  opacity: 0;
+  transform: translateX(-35px);
+  transition: all 0.7s ease;
+}
+
+.skill.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Progress bar animation (baru aktif saat terlihat) */
+.skill.visible .bar > i {
+  width: var(--skill-width);
+}
+/* Slide-in kiri */
+.skill {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+
+/* Muncul ke layar */
+.skill.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Bar container */
+.skill .bar {
+  background: rgba(255,255,255,0.06);
+  height: 8px;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Bar neon */
+.skill .bar i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  transition: width 1.2s cubic-bezier(.25,.8,.25,1);
+  
+  /* Neon glow color */
+  background: #0ff; /* cyan */
+  box-shadow: 0 0 8px #0ff, 
+              0 0 15px #0ff,
+              0 0 25px #0ff;
+  border-radius: 6px;
+  position: relative;
+}
+
+/* Pulse glow */
+.skill.visible .bar i {
+  animation: neonPulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes neonPulse {
+  from {
+    box-shadow: 0 0 6px #0ff,
+                0 0 14px #0ff,
+                0 0 20px #0ff;
+  }
+  to {
+    box-shadow: 0 0 14px #0ff,
+                0 0 25px #0ff,
+                0 0 40px #0ff;
+  }
+}
+
+/* Slide-in kiri */
+.skill {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+
+.skill.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Bar container */
+.skill .bar {
+  background: rgba(255,255,255,0.06);
+  height: 8px;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Neon bar */
+.skill .bar i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(
+    90deg,
+    rgba(0,255,255,0.3) 0%,
+    rgba(0,255,255,1) 50%,
+    rgba(0,255,255,0.3) 100%
+  );
+  background-size: 200% 100%;
+  animation: neonScan 4s linear infinite;
+  transition: width 1.2s ease;
+  border-radius: 6px;
+}
+
+/* Cahaya neon bergerak pelan */
+@keyframes neonScan {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* FIX BUTTON CYBER DI HACKER MODE */
+body.hacker .btn-cyber {
+  background: var(--accent-1) !important;
+  color: #000 !important;
+  border: 2px solid var(--accent-1);
+  box-shadow: 0 0 18px var(--accent-1);
+}
+
+/* Hover tetap kebaca */
+body.hacker .btn-cyber:hover {
+  background: transparent !important;
+  color: var(--accent-1) !important;
+}
+
+/* ===============================
+   GALLERY NEON BORDER ANIMATION
+   =============================== */
+
+.gallery-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  z-index: 1;
+}
+
+/* Border neon berjalan */
+.gallery-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: 12px;
+
+  background: linear-gradient(
+    120deg,
+    var(--accent-1),
+    var(--accent-2),
+    #00fff0,
+    var(--accent-1)
+  );
+  background-size: 300% 300%;
+  animation: neonBorderMove 8s linear infinite;
+
+  /* bikin jadi border */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Glow lembut */
+.gallery-item::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 14px;
+  background: inherit;
+  filter: blur(18px);
+  opacity: 0.5;
+  z-index: -1;
+}
+
+/* Gambar tetap aman */
+.gallery-item img {
+  position: relative;
+  z-index: 1;
+  border-radius: 10px;
+}
+
+/* Animasi jalan pelan */
+@keyframes neonBorderMove {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+</style>
+</head>
+<body>
+
+ 
+
+  <div class="cyber-grid" aria-hidden="true"></div>
+
+  <div id="pageFader" class="page-fader"></div>
+
+ <nav id="navbar" aria-label="Main navigation">
+    <div class="brand" data-parallax="0.03">
+        <div class="logo neon-hover" title="HN">HN</div>
+        <div style="user-select:none">
+            <div style="font-weight:800">Hendi Nurendi</div>
+            <div style="font-size:12px;color:var(--muted)">Frontend Developer</div>
+        </div>
+    </div>
+
+    <!-- DESKTOP MENU -->
+    <ul class="nav-links">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">Tentang</a></li>
+        <li><a href="#skills">Keahlian</a></li>
+        <li><a href="#project">Proyek</a></li>
+        <li><a href="#gallery">Galeri</a></li>
+        <li><a href="#location">Lokasi</a></li>
+        <li><a href="#contact">Kontak</a></li>
+        <li><a href="https://github.com/hendinurendi" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://albayanid.wordpress.com/" target="_blank" rel="noopener">Website</a></li>
+    <li class="rekrut-btn">
+  <a 
+  href="https://wa.me/628xxxxx?text=Halo%20saya%20ingin%20merekrut%20anda" 
+  class="btn btn-primary neon-hover"
+  target="_blank"
+>
+  Rekrut Saya
+</a>
+
+</li>
+
+</li>
+
+    </ul>
+    <div class="nav-actions">
+  <div id="themeToggle" class="theme-toggle neon-hover" title="Ganti Tema">
+    🌙
+  </div>
+
+  <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+</nav>
+
+<!-- MOBILE DROPDOWN MENU -->
+<div id="mobileMenu" class="mobile-menu">
+    <a href="#hero" onclick="closeMenu()">Home</a>
+    <a href="#about" onclick="closeMenu()">Tentang</a>
+    <a href="#skills" onclick="closeMenu()">Keahlian</a>
+    <a href="#project" onclick="closeMenu()">Proyek</a>
+    <a href="#gallery" onclick="closeMenu()">Galeri</a>
+    <a href="#location" onclick="closeMenu()">Lokasi</a>
+    <a href="#contact" onclick="closeMenu()">Kontak</a>
+    <a href="https://github.com/hendinurendi" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://albayanid.wordpress.com/" target="_blank" rel="noopener">Website</a>
+    <a 
+  href="https://wa.me/6283813365552?text=Halo%20Hendi,%20saya%20ingin%20merekrut%20Anda%20sebagai%20Frontend%20Developer."
+  class="mobile-rekrut-btn"
+  target="_blank"
+>
+  Rekrut Saya
+</a>
+
+</div>
+
+
+  <main>
+
+    <section class="hero" id="hero" aria-label="Hero section">
+      <div class="profile-card neon-hover" data-parallax="0.06" aria-hidden="false">
+        <div class="avatar" aria-hidden="true">
+          <img src="foto.jpg" alt="Foto Hendi" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
+        </div>
+
+        <div class="profile-name">Hendi Nurendi</div>
+        <div class="profile-role">Frontend Developer • UI/UX Learner</div>
+
+        <div class="profile-audio">
+          <audio controls preload="none">
+            <source src="perkenalan.mp3" type="audio/mpeg">
+            Browser Anda tidak mendukung audio.
+          </audio>
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <a class="btn" href="cv.pdf" target="_blank" rel="noopener" title="Download CV">📄 CV</a>
+          <a class="btn btn-primary neon-hover" href="#contact" title="Contact">Kontak</a>
+        </div>
+      </div>
+
+      <div class="hero-content" style="padding-right:8px" data-parallax="0.03">
+        <h3><span class="glitch" data-text="Halo, Saya Hendi Nurendi">Halo, Saya <span style="color:var(--accent-1);font-weight:800" class="glitch" data-text="Hendi Nurendi">Hendi Nurendi</span></span></h3>
+        <h1>
+          <span class="glitch" data-text="Frontend Developer & UI/UX Designer">Frontend Developer & UI/UX Designer</span>
+          <span id="typed" class="typing"></span>
+        </h1>
+        <p>Saya membuat antarmuka modern, animasi halus, dan pengalaman pengguna yang intuitif. Fokus pada performa, aksesibilitas, dan estetika cyberpunk.</p>
+
+        <div class="cta">
+          <a class="btn btn-primary neon-hover" href="#project">Lihat Proyek</a>
+          <a class="btn btn-ghost" href="https://github.com/hendinurendi" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" href="https://app.netlify.com/teams/hendinurendi0/projects" target="_blank" rel="noopener">Live Site</a>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:18px;flex-wrap:wrap">
+          <div style="padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.02);min-width:120px">
+            <div style="font-weight:800;font-size:18px">5+</div>
+            <div style="font-size:12px;color:var(--muted)">Projects</div>
+          </div>
+          <div style="padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.02);min-width:120px">
+            <div style="font-weight:800;font-size:18px">2+</div>
+            <div style="font-size:12px;color:var(--muted)">Internships</div>
+          </div>
+          <div style="padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.02);min-width:120px">
+            <div style="font-weight:800;font-size:18px">90%</div>
+            <div style="font-size:12px;color:var(--muted)">Client Satisfaction</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="particles" aria-hidden="true"></div>
+    </section>
+
+    <section id="about">
+  <div class="section-title">
+    <h2><span class="glitch" data-text="About Me">About Me</span></h2>
+    <div style="color:var(--muted);font-size:13px">Personal Info & Summary</div>
+  </div>
+
+  <p class="lead">
+    Saya mahasiswa Teknik Informatika yang fokus ke Frontend Development dan UI/UX. 
+    Saya senang membangun antarmuka modern, interaksi halus, dan portofolio yang eye-catching.
+  </p>
+
+  <div class="about-grid">
+    <div class="about-box">
+      <h4 class="glitch" data-text="Contact">Contact</h4>
+      <p style="color:var(--muted);line-height:1.8">
+        Email: <a href="mailto:hendi@gmail.com">hendi@gmail.com</a><br>
+        Phone: <a href="tel:+6283813365552">+62 83813365552</a>
+      </p>
+    </div>
+
+    <div class="about-box">
+      <h4 class="glitch" data-text="Education">Education</h4>
+      <table class="edu-table">
+        <thead>
+          <tr>
+            <th>Tahun</th>
+            <th>Instansi</th>
+            <th>Jurusan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2023 - Sekarang</td>
+            <td>Universitas Pamulang</td>
+            <td>Teknik Informatika</td>
+          </tr>
+          <tr>
+            <td>2020 - 2023</td>
+            <td>SMA Negeri 1 Bandung</td>
+            <td>IPS</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+    <section id="skills">
+      <div class="section-title"><h2 class="glitch" data-text="Keahlian">Keahlian</h2><div style="color:var(--muted);font-size:13px">Tools & Technologies</div></div>
+      <div class="skills">
+       <div class="skill">
+  HTML & CSS
+  <div class="bar">
+    <i data-skill="90"></i>
+  </div>
+</div>
+
+<div class="skill">
+  JavaScript
+  <div class="bar">
+    <i data-skill="80"></i>
+  </div>
+</div>
+
+<div class="skill">
+  React.js
+  <div class="bar">
+    <i data-skill="75"></i>
+  </div>
+</div>
+
+      </div>
+    </section>
+
+   <section id="project">
+  <div class="section-title"><h2 class="glitch" data-text="Projects">Projects</h2><div style="color:var(--muted);font-size:13px">Selected works</div></div>
+  <div class="grid">
+    <article class="card">
+      <h4 class="glitch" data-text="Project Kasir Web">Project Kasir Web</h4>
+      <p>Membuat aplikasi kasir sederhana berbasis web. Fitur transaksi, laporan, dan user management.</p>
+      <div style="margin-top:10px">
+        <a class="btn" href="https://wartam527.netlify.app" target="_blank" rel="noopener">Demo</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <h4 class="glitch" data-text="Portfolio UI Clone">Portfolio UI Clone</h4>
+      <p>Clone desain modern dengan animasi hero dan responsive layout. Terdeploy di Netlify.</p>
+      <div style="margin-top:10px">
+        <a class="btn" href="http://127.0.0.1:5500/portofolio-cv/index.html" target="_blank" rel="noopener">Live</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <h4 class="glitch" data-text="Photo & Video Editing">Photo & Video Editing</h4>
+      <p>Jasa editing foto dan video untuk konten media sosial klien.</p>
+      <div style="margin-top:10px">
+        <a class="btn" href="https://www.instagram.com/justhennn12" target="_blank" rel="noopener">Portfolio</a>
+      </div>
+    </article>
+  </div>
+</section>
+    <section id="video-project" class="project-video-section">
+  <h2 class="section-title glitch" data-text="Project Video">Project Video</h2>
+
+  <div class="video-wrapper">
+    <video controls>
+      <source src="project.mp4" type="video/mp4">
+      Browser kamu tidak mendukung tag video.
+    </video>
+  </div>
+<div class="video-wrapper">
+    <video controls>
+      <source src="project5.mp4" type="video/mp4">
+      Browser kamu tidak mendukung tag video.
+    </video>
+  </div>
+  <p class="video-caption">
+    Membuat web toko bunga dengan HTML, CSS, dan JavaScript — dan AI deteksi hewan menggunakan bahasa Python.
+  </p>
+</section>
+  <!-- PROJECT selesai -->
+
+    <!-- ===== SERTIFIKAT PDF SECTION ===== -->
+    <section id="sertifikat" class="certificate-section">
+      <div class="section-title">
+        <h2 class="glitch" data-text="Sertifikat">Sertifikat</h2>
+      </div>
+
+      <p class="lead">Berikut adalah sertifikat saya:</p>
+
+      <!-- Tampilkan PDF -->
+      <iframe 
+          src="sertifikat1.pdf" 
+          width="100%" 
+          height="500px"  
+          style="border-radius:12px; border:none; box-shadow:0 0 20px rgba(255,78,201,0.25);">
+      </iframe>
+
+      <br><br>
+
+      <!-- Tombol Download -->
+      <a href="sertifikat_word.pdf" download class="btn btn-primary neon-hover">
+          Download Sertifikat PDF
+      </a>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+      <div class="section-title"><h2 class="glitch" data-text="Galeri">Galeri</h2><div style="color:var(--muted);font-size:13px">Foto & Desain</div></div>
+      <p class="lead">Beberapa visual dari desain UI, mock-up, dan foto pribadi (placeholder).</p>
+      <div class="gallery-grid">
+        <div class="gallery-item" onclick="alert('Lihat Gambar 1')">
+          <img src="gallery1.png" alt="Design 1">
+        </div>
+        <div class="gallery-item" onclick="alert('Lihat Gambar 2')">
+          <img src="gallery2.jpeg" alt="UI Mockup">
+        </div>
+        <div class="gallery-item" onclick="alert('Lihat Gambar 3')">
+          <img src="gallery3.png" alt="Code Snippet">
+        </div>
+        <div class="gallery-item" onclick="alert('Lihat Gambar 4')">
+          <img src="gallery4.jpeg" alt="Personal Photo">
+        </div>
+      </div>
+    </section>
+    
+   <section id="location">
+  <div class="section-title">
+    <h2 class="glitch" data-text="Lokasi">Lokasi</h2>
+    <div style="color:var(--muted);font-size:13px">Tempat Tinggal / Kantor</div>
+  </div>
+
+  <p class="lead">Saat ini berlokasi di Tangerang Selatan</p>
+  
+  <div class="location-wrapper">
+    <div class="map-container" id="mapPlaceholder">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126904.2569560326!2d106.62591055284402!3d-6.295496591540827!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69fab10419c095%3A0x8706481c2c4aafe4!2sTangerang%20Selatan%2C%20Kota%20Tangerang%20Selatan%2C%20Banten!5e0!3m2!1sid!2sid!4v1765529055895!5m2!1sid!2sid"
+        width="100%" 
+        height="350" 
+        style="border:0;" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+  
+  <div style="margin-top:12px;font-size:14px;color:var(--accent-1);font-weight:600">
+    <span class="glitch" data-text="Banten, Tangerang Selatan">Banten, Tangerang Selatan</span>
+  </div>
+</section>
+
+
+    <section id="contact">
+      <div class="section-title"><h2 class="glitch" data-text="Kontak">Kontak</h2><div style="color:var(--muted);font-size:13px">Kirim pesan</div></div>
+
+      <form id="contactForm" onsubmit="submitForm(event)">
+        <div class="form-grid">
+          <input type="text" id="name" name="name" placeholder="Nama lengkap" required>
+          <input type="email" id="email" name="email" placeholder="Email" required>
+          <input type="text" id="subject" name="subject" placeholder="Subjek" required>
+          <input type="text" id="phone" name="phone" placeholder="Nomor Telepon (opsional)">
+          <textarea id="message" name="message" placeholder="Pesan..." required></textarea>
+        </div>
+
+        <div class="cta">
+  <a href="#" class="btn-cyber">Kirim Pesan</a>
+  <a href="cv.pdf" class="btn-cyber">Lihat CV (PDF)</a>
+</div>
+
+      </form>
+    </section>
+
+    <footer>
+      © <span id="year"></span> Hendi Nurendi — Built with ❤️ •
+      <a href="https://github.com/username" target="_blank" rel="noopener" style="color:var(--muted)">GitHub</a> •
+      <a href="https://instagram.com/username" target="_blank" rel="noopener" style="color:var(--muted)">Instagram</a> •
+      <a href="https://username.netlify.app" target="_blank" rel="noopener" style="color:var(--muted)">Netlify</a>
+    </footer>
+
+  </main>
+
+  <div class="wa-fab" onclick="openWhatsApp()" title="Chat via WhatsApp" role="button" tabindex="0">
+    <div class="pulse"></div>
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M20.5 3.5h-17a1 1 0 00-1 1v14l3-3h15a1 1 0 001-1v-9a1 1 0 00-1-1z" fill="#002a00" opacity="0.08"/>
+      <path d="M16.2 14.4c-.4.9-1.6 1.9-2.2 2.1-.6.2-1.3.4-2 .2-1.4-.4-3-1.9-4.3-3.5-1.5-1.8-1.7-3.2-1.1-4 .6-.8 1.6-1 2.5-1 0 0 .9-.1 1.9 0 .7.1 1.1.1 1.6-.2.4-.2 1-1.2 1.2-1.7.1-.3.4-.4.6-.4.7 0 1.9.7 2.3 1.4.6 1 .6 2.9-.5 5.2z" fill="#003300"/>
+    </svg>
+  </div>
+
+  <script>
+    
+    // ---------- UTILS ----------
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ---------- PAGE FADE (on load hide fader) ----------
+    const pageFader = document.getElementById('pageFader');
+    window.addEventListener('load', ()=> {
+      // allow CSS to paint, then hide
+      requestAnimationFrame(()=> setTimeout(()=> pageFader.classList.add('hidden'), 60));
+    });
+
+    // intercept internal anchor clicks for fade-out transition
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', function(ev){
+        const target = this.getAttribute('href');
+        if(!target || target === "#") return;
+        ev.preventDefault();
+        const el = document.getElementById(target.slice(1));
+        // fade out
+        pageFader.classList.remove('hidden');
+        setTimeout(()=>{
+          if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+          // slightly delay hiding the fader for effect
+          setTimeout(()=> pageFader.classList.add('hidden'), 400);
+        }, 420);
+      });
+    });
+
+    // ---------- TYPING EFFECT ----------
+    const words = ["UI/UX Designer", "Interactive Frontend", "Web Performance"];
+    let tIndex = 0, charIndex = 0, forward = true;
+    const typedEl = document.getElementById('typed');
+
+    function typeTick(){
+      const word = words[tIndex];
+      if(forward){
+        charIndex++;
+        if(charIndex >= word.length){ forward=false; setTimeout(typeTick,1200); return; }
+      } else {
+        charIndex--;
+        if(charIndex === 0){ forward=true; tIndex = (tIndex+1) % words.length; setTimeout(typeTick,300); return; }
+      }
+      typedEl.textContent = word.slice(0,charIndex);
+      setTimeout(typeTick, forward ? 80 : 40);
+    }
+    setTimeout(typeTick,500);
+
+    // ---------- PARTICLES ----------
+    const particlesContainer = document.querySelector('.particles');
+    const dotCount = 14;
+    for(let i=0;i<dotCount;i++){
+      const d = document.createElement('div');
+      d.className = 'dot';
+      const size = 6 + Math.random()*28;
+      d.style.width = d.style.height = size + 'px';
+      d.style.left = (Math.random()*100) + '%';
+      d.style.top = (Math.random()*100) + '%';
+      d.style.opacity = 0.06 + Math.random()*0.22;
+      particlesContainer.appendChild(d);
+
+      const dur = 8 + Math.random()*12;
+      const translateY = -40 - Math.random()*200;
+      const translateX = -20 + Math.random()*40;
+      d.animate([
+        { transform: `translate(0,0) scale(1)`, opacity: d.style.opacity},
+        { transform: `translate(${translateX}px, ${translateY}px) scale(0.7)`, opacity: 0}
+      ],{duration: dur*1000, iterations: Infinity, direction: 'alternate', easing:'ease-in-out', delay: Math.random()*1000});
+    }
+
+    // ---------- SKILLS BAR ANIMATION ON VIEW ----------
+    const bars = document.querySelectorAll('.bar > i');
+    function animateBars(){
+      bars.forEach(b=>{
+        const w = b.getAttribute('data-width') || '70%';
+        b.style.width = w;
+      })
+    }
+    // run on load
+    window.addEventListener('load', ()=> setTimeout(animateBars,650));
+
+    // ---------- CONTACT FORM (local demo) ----------
+    function submitForm(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      const message = document.getElementById('message').value.trim();
+      alert('Terima kasih, ' + (name||'Pengunjung') + '! Pesanmu telah terkirim (demo).\\nSubject: ' + subject);
+      e.target.reset();
+    }
+
+    // ---------- FLOATING WHATSAPP ----------
+    function openWhatsApp(){
+      const phone = '6283813365552'; // nomor dari bagian Contact
+      const text = encodeURIComponent('Halo Hendi! Saya melihat portofolio Anda dan ingin membahas rekrutmen.');
+      const url = `https://wa.me/${phone}?text=${text}`;
+      window.open(url,'_blank');
+    }
+
+    // ---------- PARALLAX MOUSE MOVEMENT ----------
+    // elements with data-parallax attribute will move slightly based on mouse position
+    const parallaxItems = document.querySelectorAll('[data-parallax]');
+    const clamp = (v,min,max)=> Math.max(min, Math.min(max, v));
+    window.addEventListener('mousemove', (e)=>{
+      const cx = window.innerWidth/2;
+      const cy = window.innerHeight/2;
+      const dx = (e.clientX - cx) / cx; // -1 .. 1
+      const dy = (e.clientY - cy) / cy; // -1 .. 1
+
+      parallaxItems.forEach(el=>{
+        const depth = parseFloat(el.getAttribute('data-parallax')) || 0.02;
+        const tx = clamp(-dx * 18 * depth * 10, -30, 30);
+        const ty = clamp(-dy * 18 * depth * 10, -30, 30);
+        const rz = depth * 6;
+        el.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotateY(${dx*rz}deg) rotateX(${dy*rz}deg)`;
+      });
+    });
+
+    // subtle parallax for navbar logo on mouseenter
+    const logo = document.querySelector('.logo');
+    if(logo){
+      logo.addEventListener('mouseenter', ()=> logo.classList.add('glow'));
+      logo.addEventListener('mouseleave', ()=> logo.classList.remove('glow'));
+    }
+
+    // ---------- ACCESSIBILITY: WA FAB keypress ----------
+    document.querySelector('.wa-fab').addEventListener('keypress', e=>{
+      if(e.key === 'Enter' || e.key === ' ') openWhatsApp();
+    });
+
+    // ---------- OPTIONAL: reduce-motion support ----------
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(prefersReduced){
+      // stop animations that are non-essential
+      document.querySelectorAll('.dot').forEach(d=> d.getAnimations().forEach(a=> a.cancel()));
+      document.querySelectorAll('.glitch').forEach(g=>{
+        g.style.opacity = 1; g.style.textShadow = 'none';
+        g.style.transform = 'none';
+      });
+    }
+
+    function toggleMenu() {
+  document.querySelector(".hamburger").classList.toggle("active");
+  document.getElementById("mobileMenu").classList.toggle("open");
+}
+
+function closeMenu() {
+  document.querySelector(".hamburger").classList.remove("active");
+  document.getElementById("mobileMenu").classList.remove("open");
+}
+
+
+const modes = ["dark", "light", "hacker"];
+let current = localStorage.getItem("theme-mode") || "dark";
+
+const icons = {
+  dark: "🌙",
+  light: "☀️",
+  hacker: "🟩"
+};
+
+function applyTheme(mode){
+  document.body.classList.remove("light", "hacker");
+  if(mode !== "dark") document.body.classList.add(mode);
+  localStorage.setItem("theme-mode", mode);
+  document.getElementById("themeToggle").textContent = icons[mode];
+}
+
+function toggleTheme(){
+  const idx = modes.indexOf(current);
+  current = modes[(idx + 1) % modes.length];
+  applyTheme(current);
+}
+
+applyTheme(current);
+document.getElementById("themeToggle").onclick = toggleTheme;
+
+const audio = document.querySelector(".profile-audio audio");
+  const wrapper = document.querySelector(".profile-audio");
+
+  audio.addEventListener("play", () => {
+    wrapper.classList.add("audio-playing");
+  });
+
+  audio.addEventListener("pause", () => {
+    wrapper.classList.remove("audio-playing");
+  });
+
+  audio.addEventListener("ended", () => {
+    wrapper.classList.remove("audio-playing");
+  });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const skills = document.querySelectorAll(".skill");
+
+  skills.forEach(s => {
+    const bar = s.querySelector(".bar > i");
+    if (bar) {
+      // Ambil persen dari atribut data-skill="80"
+      const w = bar.getAttribute("data-skill");
+      bar.style.setProperty("--skill-width", w + "%");
+    }
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll(".skill").forEach(el => observer.observe(el));
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const skills = document.querySelectorAll(".skill");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const bar = entry.target.querySelector("i");
+        const percent = bar.getAttribute("data-skill");
+
+        entry.target.classList.add("visible");
+        bar.style.width = percent + "%";
+      }
+    });
+  }, { threshold: 0.2 });
+
+  skills.forEach(skill => observer.observe(skill));
+});
+  
+document.addEventListener("DOMContentLoaded", () => {
+  const skills = document.querySelectorAll(".skill");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const bar = entry.target.querySelector("i");
+        const percent = bar.getAttribute("data-skill");
+
+        entry.target.classList.add("visible");
+        bar.style.width = percent + "%";
+      }
+    });
+  }, { threshold: 0.2 });
+
+  skills.forEach(skill => observer.observe(skill));
+});
+
+  </script>
+</body>
+</html>
